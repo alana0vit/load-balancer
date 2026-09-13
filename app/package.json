@@ -1,0 +1,12 @@
+{
+  "name": "loadbalancer-demo-app",
+  "version": "1.0.0",
+  "description": "Aplicacao simples para demonstracao de load balancing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

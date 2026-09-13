@@ -1,0 +1,61 @@
+services:
+  app-01:
+    build: ./app
+    container_name: app-01
+    environment:
+      - INSTANCE_ID=app-01
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  app-02:
+    build: ./app
+    container_name: app-02
+    environment:
+      - INSTANCE_ID=app-02
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  app-03:
+    build: ./app
+    container_name: app-03
+    environment:
+      - INSTANCE_ID=app-03
+      - PORT=3000
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
+  # app-04:
+  #   build: ./app
+  #   container_name: app-04
+  #   environment:
+  #     - INSTANCE_ID=app-04
+  #     - PORT=3000
+  #   healthcheck:
+  #     test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+  #     interval: 5s
+  #     timeout: 2s
+  #     retries: 3
+
+  load-balancer:
+    image: haproxy:2.8-alpine
+    container_name: load-balancer
+    ports:
+      - "8080:80"
+      - "8404:8404"
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - app-01
+      - app-02
+      - app-03
