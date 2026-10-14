@@ -10,7 +10,7 @@ como único ponto de entrada.
 Cliente (navegador / curl)
         |
         v
-  HAProxy (porta 8080) <-- único endereço acessado pelo avaliador
+  HAProxy (porta 8080) <-- único endereço acessado
         |
         +--> app-01 (porta interna 3000)
         +--> app-02 (porta interna 3000)
@@ -162,21 +162,8 @@ docker compose exec app-01 env | grep INSTANCE_ID
      e isso aparece como "healthy"/"unhealthy" em `docker compose ps`.
 
 ## Limitações e possíveis evoluções
-
-- **Estado em memória**: a aplicação não guarda nenhum estado; se guardasse (ex.:
-  carrinho de compras, login), a alternância entre instâncias faria esse estado
-  "sumir" a cada requisição. Isso se resolve com *sticky sessions* (HAProxy suporta
-  via `cookie`/`stick-table`) ou movendo o estado para um armazenamento externo
-  compartilhado (Redis, banco de dados).
 - **Auto-scaling real**: hoje o número de instâncias é fixo e a 4ª instância é
   adicionada manualmente (descomentando linhas). Uma instância nova aparecer
   sozinha, sem intervenção, exige um orquestrador com esse recurso nativo — Docker
   Swarm (`docker service scale`) ou Kubernetes (HPA). O Docker Compose puro não
   tem auto-scaling.
-- **Self-healing** (uma instância que caiu voltar sozinha): não configuramos
-  `restart` automático neste projeto por opção — o teste de falha é feito
-  manualmente (`docker stop` / `docker start`), o que deixa mais claro o momento
-  exato da falha e da recuperação durante a demonstração.
-- **Mais instâncias**: basta duplicar o bloco de serviço no `docker-compose.yml`
-  com um novo `INSTANCE_ID` e adicionar a linha correspondente no `backend` do
-  HAProxy — nada no código da aplicação precisa mudar.
