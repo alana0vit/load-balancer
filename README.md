@@ -51,8 +51,6 @@ loadbalancer-lab/
 │   └── Dockerfile
 ├── haproxy/
 │   └── haproxy.cfg       # configuração do load balancer (health check ativo)
-├── nginx-alternativa/
-│   └── nginx.conf        # referência: mesma ideia, com NGINX (health check passivo)
 ├── scripts/
 │   └── test_distribution.sh   # script do teste de volume
 └── docker-compose.yml
